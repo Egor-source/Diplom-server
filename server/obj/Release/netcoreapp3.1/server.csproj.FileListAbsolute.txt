@@ -1,0 +1,25 @@
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\appsettings.Development.json
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\appsettings.json
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\groups.json
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\Properties\launchSettings.json
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\sessions.json
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\server.exe
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\server.deps.json
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\server.runtimeconfig.json
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\server.runtimeconfig.dev.json
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\server.dll
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\server.pdb
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\Newtonsoft.Json.dll
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.AssemblyInfoInputs.cache
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.AssemblyInfo.cs
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.RazorTargetAssemblyInfo.cache
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.csproj.CopyComplete
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\staticwebassets\server.StaticWebAssets.Manifest.cache
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\staticwebassets\server.StaticWebAssets.xml
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.dll
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.pdb
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.genruntimeconfig.cache
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.csproj.CoreCompileInputs.cache
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.MvcApplicationPartsAssemblyInfo.cache
+E:\Программы\Diplom\server\server\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\Diplom-server - Web Deploy\profile.arm.json
+E:\Программы\Diplom\server\server\obj\Release\netcoreapp3.1\server.csprojAssemblyReference.cache

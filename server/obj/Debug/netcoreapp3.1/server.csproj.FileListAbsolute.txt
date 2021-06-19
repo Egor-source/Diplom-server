@@ -14,8 +14,6 @@ E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\server.runtim
 E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\server.dll
 E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\server.pdb
 E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
-E:\Программы\Diplom\server\server\obj\Debug\netcoreapp3.1\server.csproj.CoreCompileInputs.cache
-E:\Программы\Diplom\server\server\obj\Debug\netcoreapp3.1\server.MvcApplicationPartsAssemblyInfo.cache
 E:\Программы\Diplom\server\server\obj\Debug\netcoreapp3.1\server.csproj.CopyComplete
 E:\Программы\Diplom\server\server\obj\Debug\netcoreapp3.1\server.dll
 E:\Программы\Diplom\server\server\obj\Debug\netcoreapp3.1\server.pdb
@@ -23,3 +21,19 @@ E:\Программы\Diplom\server\server\obj\Debug\netcoreapp3.1\server.genrun
 E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\sessions.json
 E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\groups.json
 E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\Diplom-server - Web Deploy\profile.arm.json
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\DnsClient.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\MongoDB.Bson.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\MongoDB.Driver.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\MongoDB.Driver.Core.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\MongoDB.Libmongocrypt.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\SharpCompress.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\runtimes\win\native\libzstd.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy32.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy64.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\runtimes\linux\native\libmongocrypt.so
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\runtimes\osx\native\libmongocrypt.dylib
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\runtimes\win\native\mongocrypt.dll
+E:\Программы\Diplom\server\server\bin\Debug\netcoreapp3.1\MongoDB.Driver.GridFS.dll
+E:\Программы\Diplom\server\server\obj\Debug\netcoreapp3.1\server.csproj.CoreCompileInputs.cache
+E:\Программы\Diplom\server\server\obj\Debug\netcoreapp3.1\server.MvcApplicationPartsAssemblyInfo.cache

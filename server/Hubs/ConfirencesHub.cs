@@ -8,39 +8,33 @@ using Newtonsoft.Json;
 using server.Models;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using server.db;
+using MongoDB.Driver;
 
 namespace server.Hubs
 {
     public class ConfirencesHub:Hub
     {
-      static Dictionary<string, List<HubUser>> groups { get; set; } 
+      static Dictionary<string, List<HubUser>> groups { get; set; }
+      private readonly DbService db;
 
-       public ConfirencesHub()
+        public ConfirencesHub(DbService context)
         {
-
-            using (StreamReader sr = new StreamReader("groups.json"))
-            {
-                groups = JsonConvert.DeserializeObject<Dictionary<string, List<HubUser>>>(sr.ReadToEnd());
-                sr.Close();
-            }
-
-            if (groups == null)
-            {
-                groups = new Dictionary<string, List<HubUser>>();
-            }
-
+            db = context;
+            db.CreateColletion("groups");
+            db.CreateColletion("sessions");
         }
 
        public async Task UserConnection(string json)
        {
             HubModel session = JsonConvert.DeserializeObject<HubModel>(json);
 
-            List<HubUser> group=new List<HubUser>();
+            GropModel groupModel = await db.Find("groups", session.confirenceId) as GropModel;
 
-            if (groups.ContainsKey(session.confirenceId))
+            if (groupModel != null)
             {
+                List<HubUser> group  = groupModel.users;
 
-                group = groups[session.confirenceId];
                 List<string> logins = new List<string>();
 
                 Regex regex = new Regex(@"\((\d){1,3}\)");
@@ -68,12 +62,14 @@ namespace server.Hubs
 
                 }
 
-
                 await Clients.Caller.SendAsync("getUsersList", JsonConvert.SerializeObject(group), session.login);
 
-                groups[session.confirenceId].Add(new HubUser(session.login,session.userRole,Context.ConnectionId));
+                groupModel.users.Add(new HubUser(session.login, session.userRole, Context.ConnectionId));
 
                 await Clients.Group(session.confirenceId).SendAsync("newUserConnected", session.login);
+
+                await db.Update("groups", groupModel);
+
             }
             else
             {
@@ -82,19 +78,18 @@ namespace server.Hubs
 
                 list.Add(new HubUser(session.login,session.userRole, Context.ConnectionId));
 
-                groups.Add(session.confirenceId, list);
+                GropModel newGroup = new GropModel();
 
-                await Clients.Caller.SendAsync("getUsersList", JsonConvert.SerializeObject(group), session.login);
+                newGroup.confirenceId = session.confirenceId;
+                newGroup.users = list;
+
+                await Clients.Caller.SendAsync("getUsersList", JsonConvert.SerializeObject(new List<HubUser>()), session.login);
+
+                await db.Create("groups", newGroup);
+
             }
 
             await Groups.AddToGroupAsync(Context.ConnectionId, session.confirenceId);
-
-
-            using (StreamWriter sw = new StreamWriter("groups.json"))
-            {
-                sw.WriteLine(JsonConvert.SerializeObject(groups));
-                sw.Close();
-            }
 
         }
 
@@ -116,55 +111,30 @@ namespace server.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            var collection = await db.GetAll("groups");
 
-            string endSessionId = null;
+            List<GropModel> groups = new List<GropModel>();
 
-            foreach (var i in groups)
+            foreach(var i in collection)
             {
-                HubUser disconectedUser = i.Value.Where(x => x.connectionId == Context.ConnectionId).FirstOrDefault();
-                if(disconectedUser != null)
-                {
-
-                    if(disconectedUser.userRole== "admin")
-                    {
-                        endSessionId = i.Key;
-                        groups.Remove(i.Key);
-                        await Clients.Group(i.Key).SendAsync("endSession");
-                    }
-                    else
-                    {
-                        i.Value.Remove(disconectedUser);
-                        await Clients.Group(i.Key).SendAsync("userDisconnected", disconectedUser.login);
-                    }
-
-                    using (StreamWriter sw = new StreamWriter("groups.json"))
-                    {
-                        sw.WriteLine(JsonConvert.SerializeObject(groups));
-                        sw.Close();
-                    }
-
-                    break;
-                }
+                groups.Add(i as GropModel);
             }
 
-            if (endSessionId != null)
+            GropModel group = groups.Where(group => group.users.Where(user => user.connectionId == Context.ConnectionId).FirstOrDefault() != null).FirstOrDefault();
+
+            HubUser disconectedUser = group.users.Where(x => x.connectionId == Context.ConnectionId).FirstOrDefault();
+
+            if (disconectedUser.userRole == "admin")
             {
-
-               List<SessionModel> sessions ;
-
-                using (StreamReader sr = new StreamReader("sessions.json"))
-                {
-                    sessions = JsonConvert.DeserializeObject<List<SessionModel>>(sr.ReadToEnd());
-                    sr.Close();
-                }
-
-                sessions.Remove(sessions.Where(x => x.confirenceId == endSessionId).First());
-
-                using (StreamWriter sw = new StreamWriter("sessions.json"))
-                {
-                    sw.WriteLine(JsonConvert.SerializeObject(sessions));
-                    sw.Close();
-                }
+                await Clients.Group(group.confirenceId).SendAsync("endSession");
+                await db.Remove("groups", group.confirenceId);
+                await db.Remove("sessions", group.confirenceId);
+            }
+            else
+            {
+                group.users.Remove(disconectedUser);
+                await Clients.Group(group.confirenceId).SendAsync("userDisconnected", disconectedUser.login);
+                await db.Update("groups", group);
             }
 
             await base.OnDisconnectedAsync(exception);

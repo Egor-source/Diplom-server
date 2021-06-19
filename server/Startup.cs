@@ -10,7 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
+using server.db;
 using server.Hubs;
+using server.Models;
 
 namespace server
 {
@@ -28,7 +31,9 @@ namespace server
         {
             services.AddSignalR();
             services.AddControllers();
-
+            BsonClassMap.RegisterClassMap<SessionModel>();
+            BsonClassMap.RegisterClassMap<GropModel>();
+            services.AddTransient<DbService>();
             services.AddCors();
         }
 

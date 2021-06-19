@@ -7,7 +7,8 @@ using server.Models;
 using Newtonsoft.Json;
 using System.IO;
 using server.Exeptions;
-
+using server.db;
+using MongoDB.Bson;
 
 namespace server.Controllers
 {
@@ -15,21 +16,25 @@ namespace server.Controllers
     public class SessionController : ControllerBase
     {
 
-        List<SessionModel> sessions = new List<SessionModel>();
+        //List<SessionModel> sessions = new List<SessionModel>();
+        private readonly DbService db;
 
-        public SessionController()
+        public SessionController(DbService context)
         {
-            using(StreamReader sr=new StreamReader("sessions.json"))
-            {
-                sessions = JsonConvert.DeserializeObject<List<SessionModel>>(sr.ReadToEnd());
+            //using(StreamReader sr=new StreamReader("sessions.json"))
+            //{
+            //    sessions = JsonConvert.DeserializeObject<List<SessionModel>>(sr.ReadToEnd());
 
-                sr.Close();
-            }
+            //    sr.Close();
+            //}
 
-            if (sessions == null)
-            {
-                sessions = new List<SessionModel>();
-            }
+            //if (sessions == null)
+            //{
+            //    sessions = new List<SessionModel>();
+            //}
+
+            db = context;
+            db.CreateColletion("sessions");
         }
 
         /// <summary>
@@ -39,19 +44,19 @@ namespace server.Controllers
         /// <returns>Статус запроса</returns>
         [Route("api/[controller]/Create")]
         [HttpPost]
-        public ActionResult Create(SessionModel newSession)
+        public  async Task<ActionResult> Create(SessionModel newSession)
         {
 
             try
             {
-                sessions.Add(newSession);
+                //    sessions.Add(newSession);
 
-                using (StreamWriter sw = new StreamWriter("sessions.json"))
-                {
-                    sw.WriteLine(JsonConvert.SerializeObject(sessions));
-                    sw.Close();
-                }
-
+                //    using (StreamWriter sw = new StreamWriter("sessions.json"))
+                //    {
+                //        sw.WriteLine(JsonConvert.SerializeObject(sessions));
+                //        sw.Close();
+                //    }
+               await db.Create("sessions", newSession);
             }
             catch (Exception e)
             {
@@ -68,9 +73,9 @@ namespace server.Controllers
         /// <returns>Статус запроса</returns>
         [Route("api/[controller]/Login")]
         [HttpPost]
-        public ActionResult Login(UserModel user)
+        public  async Task<ActionResult> Login(UserModel user)
         {
-            SessionModel session = sessions.Where( i => i.confirenceId == user.confirenceId).FirstOrDefault();
+            SessionModel session =await db.Find("sessions", user.confirenceId) as SessionModel;
 
             string userRole;
 
@@ -86,17 +91,19 @@ namespace server.Controllers
 
                     if (session.adminPassword == user.password)
                     {
-                        sessions.Remove(session);
+                        //sessions.Remove(session);
                         session.conferenceStarted = true;
-                        sessions.Add(session);
+                        //sessions.Add(session);
+
+                        await db.Update("sessions", session);
 
                         userRole = "admin";
 
-                        using (StreamWriter sw = new StreamWriter("sessions.json"))
-                        {
-                            sw.WriteLine(JsonConvert.SerializeObject(sessions));
-                            sw.Close();
-                        }
+                        //using (StreamWriter sw = new StreamWriter("sessions.json"))
+                        //{
+                        //    sw.WriteLine(JsonConvert.SerializeObject(sessions));
+                        //    sw.Close();
+                        //}
                     }
                     else
                     {
@@ -129,17 +136,18 @@ namespace server.Controllers
 
         [Route("api/[controller]/CheckLocalStorage")]
         [HttpPost]
-        public string CheckLocalStorage(string[] confirencesId)
+        public  async  Task<string> CheckLocalStorage(string[] confirencesId)
         {
             List<string> existingСonferences = new List<string>();
 
             foreach (var i in confirencesId)
             {
-               string confirenceId= sessions.Where(x => x.confirenceId == i).Select(x => x.confirenceId).FirstOrDefault();
-                if(confirenceId != null)
+                SessionModel session = await db.Find("sessions", i) as SessionModel;
+                if (session != null)
                 {
-                    existingСonferences.Add(confirenceId);
+                    existingСonferences.Add(session.confirenceId);
                 }
+
             }
 
             return JsonConvert.SerializeObject(existingСonferences);
